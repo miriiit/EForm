@@ -24,7 +24,7 @@ const COMPONENT_OPTIONS: FormioCustomComponentInfo = {
   title: 'D Image', // Title of the component
   group: 'custom', // Build Group
   icon: 'check-circle', // Icon
-  fieldOptions: ['label', 'values', 'key'],
+  fieldOptions: ['label', 'values', 'key', 'properties'],
   // editForm: imageEditForm, // Use editForm from Radio buttons
   //  template: 'input', // Optional: define a template for the element. Default: input
 //  changeEvent: 'valueChange', // Optional: define the changeEvent when the formio updates the value in the state. Default: 'valueChange',

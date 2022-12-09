@@ -7,20 +7,22 @@ import { FormioCustomComponent } from '@formio/angular';
   styleUrls: ['./dimage.component.scss']
 })
 export class DimageComponent implements
-FormioCustomComponent<number>{
+FormioCustomComponent<Record<string, string>>{
 
     @Input()
-    value: number;
+    value: Record<string, string>;
   
     @Output()
-    valueChange = new EventEmitter<number>();
+    valueChange = new EventEmitter<Record<string, string>>();
   
     @Input()
     disabled: boolean;
 
+    @Input() 
+    properties: Record<string, string>;
+
   constructor() {
     this.disabled = false;
-    this.value = 0;
+    this.value = {'a': '123'};
   }
-
 }

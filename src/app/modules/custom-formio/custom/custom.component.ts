@@ -41,7 +41,6 @@ export class CustomComponent implements AfterViewInit, OnInit {
   }
 
   onChange(event) {
-
     console.log("on change: "+ event.form);
     this.refreshForm.emit({
       property: "form",
@@ -67,6 +66,8 @@ export class CustomComponent implements AfterViewInit, OnInit {
 
   addForm() {
     let formData = JSON.stringify(this.form);
+    console.log("Form: "+ formData);
+    return;
     this.service.addForm(formData).subscribe((res) => {
       this.refreshFormList();
     });

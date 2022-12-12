@@ -1,11 +1,18 @@
 import { HttpHeaders } from "@angular/common/http";
 export class AppConstants {
+
+    public static readonly ROUTES = {
+        formIo: {
+            viewFormIo: 'view-formio'
+        }
+    }
     // Form 
     public static readonly Form_Get_Listing = 'Forms';
     public static readonly Form_Get_Item = 'Forms';
     public static readonly Form_Add_Item = 'Forms';
     public static readonly Form_Update_Item = 'Forms/PutForm';
     public static readonly Form_Delete_Item = 'Forms/DeleteForm?id=';
+    public static readonly Formio_Header_Item = 'WeatherForecast/GetHeaderInfo';
 
     // Form Submission
     public static readonly FSBase = 'FormSubmissions';

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoadingService } from 'src/app/service/loading.service';
 
 @Component({
   selector: 'app-navbar',

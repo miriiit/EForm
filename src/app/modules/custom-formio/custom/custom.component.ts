@@ -6,11 +6,18 @@ import {
   EventEmitter,
   OnInit,
 } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
 
 import { Formio, FormBuilderComponent } from '@formio/angular';
 
 import { FormioRefreshValue } from "@formio/angular";
-import { PrismService } from 'src/app/service/Prism.service';
+import { finalize } from "rxjs/operators";
+import { AppConstants } from "src/app/constants/app-constants";
+import { IGenericResponst } from "src/app/models/generic-response.model";
+import { ApiClientHelper } from "src/app/service/api-client.helper.service";
+import { LoadingService } from "src/app/service/loading.service";
+import { EModalType, ModalBService } from "src/app/service/modal-b.service";
+import { EMatchingParams } from "../../enum/matching-params.enum";
 
 import { formioOptions } from '../model/fomio-builder.options';
 import { FormioHttpService } from '../service/formio-http.service';
@@ -22,9 +29,9 @@ import { FormioHttpService } from '../service/formio-http.service';
 })
 export class CustomComponent implements AfterViewInit, OnInit {
 
-  public form: any = {components: []};
+  public form: any = { components: [] };
+  public viewform: any = { components: [] };
   public refreshForm: EventEmitter<FormioRefreshValue> = new EventEmitter();
-  public viewform: any = {components: []};
   options: any;
 
   FormId: Number;
@@ -32,8 +39,12 @@ export class CustomComponent implements AfterViewInit, OnInit {
   FormList: any = [];
   submissionData: any = { data: {} };
 
+  headerInfo: TFormHeader = null;
+
   constructor(
-    public service: FormioHttpService) {
+    public service: FormioHttpService, private loadingService: LoadingService, private modalService: ModalBService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router) {
     this.options = formioOptions;
     this.form = { components: [] };
     this.viewform = { components: [] };
@@ -41,12 +52,11 @@ export class CustomComponent implements AfterViewInit, OnInit {
   }
 
   onChange(event) {
-    console.log("on change: "+ event.form);
+    console.log("on change: " + event.form);
     this.refreshForm.emit({
       property: "form",
       value: event.form,
     });
-
   }
 
   ngAfterViewInit() {
@@ -55,6 +65,7 @@ export class CustomComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.refreshFormList();
+    this.fetchHeaderDetail();
   }
 
 
@@ -66,8 +77,6 @@ export class CustomComponent implements AfterViewInit, OnInit {
 
   addForm() {
     let formData = JSON.stringify(this.form);
-    console.log("Form: "+ formData);
-    return;
     this.service.addForm(formData).subscribe((res) => {
       this.refreshFormList();
     });
@@ -76,22 +85,29 @@ export class CustomComponent implements AfterViewInit, OnInit {
 
   editClick(item: any) {
     this.FormId = item.id;
-    this.form = JSON.parse(item.formJson);
+    let formJson = JSON.parse(item.formJson);
+    this.form = formJson;
+    this.viewform = formJson;
   }
 
 
   viewClick(item: any) {
     this.FormId = item.id;
+    let formJson = JSON.parse(item.formJson);
+    // console.log("JSON.parse(item.formJson) : ", formJson);
+    if ('components' in formJson) {
+      this.parseHeaders(formJson.components, EMatchingParams.FormHeader);
+    }
 
-    console.log("JSON.parse(item.formJson) : ", JSON.parse(item.formJson));
-
-    this.viewform = JSON.parse(item.formJson);
+    this.router.navigate([AppConstants.ROUTES.formIo.viewFormIo, { data:  JSON.stringify(formJson)}], {relativeTo: this.activatedRoute});
+    // this.modalService.open(EModalType.VIEW_FORMIO, JSON.stringify(formJson));
+    // this.viewform = formJson;
   }
 
   deleteClick(item: any) {
     if (confirm('Are you sure??')) {
       this.service.deleteForm(item.id).subscribe(data => {
-        console.log(data)
+        console.log(data);
         this.refreshFormList();
       })
     }
@@ -119,13 +135,56 @@ export class CustomComponent implements AfterViewInit, OnInit {
     this.viewform.emit('submitDone')
   }
 
-
   onRenderCompleted($event) {
-    console.log("onRenderCompleted :", $event)
+    // console.log("onRenderCompleted :", $event)
   }
 
   ready(event) {
-    console.log("event :", event)
+    // console.log("event :", event)
     //this.viewform = event.formio;
   }
+
+  parseHeaders(components: any[] = [], matchParam: EMatchingParams) {
+    if (components && components.length) {
+      for (let item of components) {
+        if (item.label == matchParam) {
+          this.repalaceHeaderDetail(item);
+        }
+      }
+    }
+  }
+
+  repalaceHeaderDetail(item: {}) {
+    let propObj = item["properties"];
+    item["properties"] = { ...propObj, ...this.headerInfo };
+    // console.log(item["properties"]);
+  }
+
+
+  fetchHeaderDetail() {
+    this.loadingService.start();
+    this.service.getFormHeaderDetail()
+      .pipe(finalize(() => this.loadingService.stop()))
+      .subscribe({
+        next: res => {
+          this.headerInfo = res.data;
+          //  console.log("Response: "+ res);
+        },
+        error: () => {
+          this.service.errorObs.next(true);
+        }
+      });
+  }
+}
+
+export type TFormHeader = {
+  name: string,
+  description: string,
+  subDescription: string,
+  formName?: string,
+  companyName?: string,
+  phoneNumber?: string,
+  department?: string,
+  imageUrl?: string,
+  companyAddress?: string
 }

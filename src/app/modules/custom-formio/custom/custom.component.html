@@ -17,9 +17,16 @@
         <hr />
 
         <h3 class="text-center text-muted">As Rendered Form</h3>
-        <span class="input-group-text">Form Id</span>
-        <input type="text" class="form-control" [(ngModel)]="FormId" style="margin: 10px;">
-
+        
+        <div class="form-inline">
+            <div class="form-group mb-2">
+                <label for="formId">Form Id</label>
+                <input type="text" class="form-control text-bg-light" id="formId" [ngModel]="FormId" aria-describedby="formIdHelp" readonly>
+                <small id="formIdHelp" class="form-text text-muted">Form Id for current form.</small>
+            </div>
+        </div>
+       
+    
         <div class="well jsonviewer">
             <formio [form]="viewform" #formIO [refresh]="refreshForm" (submit)="onSubmit($event)"
                 (render)="onRenderCompleted($event)" (ready)="ready($event)" [submission]="submissionData"></formio>

@@ -10,19 +10,26 @@ import { FormioHttpService } from './service/formio-http.service';
 import { FormioAppConfig, FormioModule } from '@formio/angular';
 import { AppConfig } from 'src/formio-config';
 import { FormsModule } from '@angular/forms';
+import { ViewFormioComponent } from './components/view-formio/view-formio.component';
+import { AppConstants } from 'src/app/constants/app-constants';
 
 const routes: Routes = [
   {
     path: '',
-    component: CustomComponent
+    component: CustomComponent,
+  },
+  {
+    path: AppConstants.ROUTES.formIo.viewFormIo,
+    component: ViewFormioComponent,
   },
 ];
 
 @NgModule({
   declarations: [
     CustomComponent,
+    ViewFormioComponent,
     UserFormHeaderComponent,
-    DimageComponent
+    DimageComponent,
   ],
   imports: [
     RouterModule.forChild(routes),

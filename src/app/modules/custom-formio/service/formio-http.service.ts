@@ -1,27 +1,34 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AppConfigService } from 'src/app/service/app.config.service';
 import { AppConstants } from 'src/app/constants/app-constants';
+import { ApiClientHelper } from 'src/app/service/api-client.helper.service';
+import { TFormHeader } from '../custom/custom.component';
+import { IGenericResponst } from 'src/app/models/generic-response.model';
+import { finalize, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FormioHttpService {
 
-  constructor(private http: HttpClient, private appConfig: AppConfigService) { }
+	public errorObs = new BehaviorSubject<boolean>(false);
+	public errorObs$ = ApiClientHelper.errorObs.asObservable();
+
+  constructor(private appConfig: AppConfigService,
+    private httpService: ApiClientHelper) { }
 
   public getFormList(): Observable<any[]> {
-    return this.http.get<any[]>(this.appConfig.apiUrl + AppConstants.Form_Get_Listing);
+    return this.httpService.getAsObservable(this.appConfig.apiUrl + AppConstants.Form_Get_Listing);
   }
 
   addForm(form: any): Observable<any> {
-
     var data = {
       "id": 0,
       "formJson": form
     };
-    return this.http.post<any>(this.appConfig.apiUrl + AppConstants.Form_Add_Item, data, AppConstants.httpOptions);
+    return this.httpService.postForObservable<any>(this.appConfig.apiUrl + AppConstants.Form_Add_Item, data);
   }
 
   updateForm(formData: any): Observable<any> {
@@ -30,11 +37,17 @@ export class FormioHttpService {
       "id": formData.id,
       "formJson": formData.formJson
     };
-
-    return this.http.post<any>(this.appConfig.apiUrl + AppConstants.Form_Update_Item, data, AppConstants.httpOptions);
+    return this.httpService.postForObservable<any>(this.appConfig.apiUrl + AppConstants.Form_Update_Item, data);
   }
 
   deleteForm(id: any): Observable<any> {
-    return this.http.get<any>(this.appConfig.apiUrl + AppConstants.Form_Delete_Item + id, AppConstants.httpOptions);
+    return this.httpService.getAsObservable(this.appConfig.apiUrl + AppConstants.Form_Delete_Item + id);
+  }
+
+
+  public getFormHeaderDetail(): Observable<IGenericResponst<TFormHeader>> {
+    // this.errorObs.next(false);
+    const url = `${this.appConfig.apiUrl + AppConstants.Formio_Header_Item}`;
+    return this.httpService.getForObservable<IGenericResponst<TFormHeader>>(url);
   }
 }

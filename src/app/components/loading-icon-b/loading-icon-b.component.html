@@ -1,0 +1,3 @@
+<div [ngClass]="[options.textClass || 'text-secondary', 'spinner-border']" role="status" *ngIf="(loadingService.loadingObs | async) == true">
+    <span class="sr-only">Loading...</span>
+</div>

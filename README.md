@@ -29,3 +29,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Modal Integration
 https://ng-bootstrap.github.io/#/components/modal/examples
+
+## Loading icons
+https://getbootstrap.com/docs/4.4/components/spinners/

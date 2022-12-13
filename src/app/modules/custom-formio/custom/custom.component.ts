@@ -14,7 +14,7 @@ import { FormioRefreshValue } from "@formio/angular";
 import { finalize } from "rxjs/operators";
 import { AppConstants } from "src/app/constants/app-constants";
 import { AppService } from "src/app/service/app.service";
-import { LoadingService } from "src/app/service/loading.service";
+import { EAppActions, LoadingService } from "src/app/service/loading.service";
 import { EModalType, ModalBService } from "src/app/service/modal-b.service";
 import { ToastService } from "src/app/service/toast.service";
 import { EMatchingParams } from "../../enum/matching-params.enum";
@@ -40,6 +40,11 @@ export class CustomComponent implements AfterViewInit, OnInit {
   submissionData: any = { data: {} };
 
   headerInfo: TFormHeader = null;
+
+
+  //Loader Variables
+  loadingAddFormIo: EAppActions = EAppActions.AddFormIo;
+  loadingUpdateFormIo: EAppActions = EAppActions.UpdateFormIo;
 
   constructor(
     public service: FormioHttpService, private loadingService: LoadingService, private modalService: ModalBService,
@@ -80,9 +85,9 @@ export class CustomComponent implements AfterViewInit, OnInit {
   addForm() {
     let formData = JSON.stringify(this.form);
     if (formData) {
-      this.loadingService.start();
+      this.loadingService.start(EAppActions.AddFormIo);
       this.service.addForm(formData)
-        .pipe(finalize(() => this.loadingService.stop()))
+        .pipe(finalize(() => this.loadingService.stop(EAppActions.AddFormIo)))
         .subscribe({
           next: res => {
             this.toastService.showSuccess(AppConstants.Text.apiWSuccess);
@@ -128,9 +133,9 @@ export class CustomComponent implements AfterViewInit, OnInit {
       )
       .then((confirmed) => {
         if (confirmed) {
-          this.loadingService.start();
+          this.loadingService.start(EAppActions.App);
           this.service.deleteForm(item.id)
-            .pipe(finalize(() => this.loadingService.stop()))
+            .pipe(finalize(() => this.loadingService.stop(EAppActions.App)))
             .subscribe({
               next: res => {
                 this.toastService.showSuccessDanger(AppConstants.Text.apiDeleteSuccess);
@@ -156,9 +161,9 @@ export class CustomComponent implements AfterViewInit, OnInit {
       };
 
       // console.log("updateFormData : ", updateFormData);
-      this.loadingService.start();
+      this.loadingService.start(EAppActions.UpdateFormIo);
       this.service.updateForm(updateFormData)
-        .pipe(finalize(() => this.loadingService.stop()))
+        .pipe(finalize(() => this.loadingService.stop(EAppActions.UpdateFormIo)))
         .subscribe({
           next: res => {
             this.toastService.showSuccess(AppConstants.Text.apiUpdateSuccess);
@@ -214,9 +219,9 @@ export class CustomComponent implements AfterViewInit, OnInit {
 
 
   fetchHeaderDetail() {
-    this.loadingService.start();
+    this.loadingService.start(EAppActions.App);
     this.service.getFormHeaderDetail()
-      .pipe(finalize(() => this.loadingService.stop()))
+      .pipe(finalize(() => this.loadingService.stop(EAppActions.App)))
       .subscribe({
         next: res => {
           this.headerInfo = res.data;

@@ -6,12 +6,8 @@
 
         <form-builder [form]="form" (change)="onChange($event)" [options]="options"></form-builder>
         <div class="col-12"  style="margin:1em 0em;">
-            <button (click)="addForm()" class="btn btn-outline-primary">
-                Add Form
-            </button>
-            <button (click)="updateForm()" class="btn btn-outline-dark" style="margin-left:20px;">
-                Update
-            </button>
+            <app-cstm-btn (btnClick)="addForm()" [isLoading]="" text="Add Form" [loadingAction]="loadingAddFormIo" cssClass="btn-primary" [isDisabled]="false" style="margin-right: 1em;"></app-cstm-btn>
+            <app-cstm-btn (btnClick)="updateForm()" text="Update Form" [loadingAction]="loadingUpdateFormIo" cssClass="btn-warning" [isDisabled]="false"></app-cstm-btn>
         </div>
 
         <hr />

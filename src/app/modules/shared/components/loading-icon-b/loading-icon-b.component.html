@@ -1,0 +1,5 @@
+<div class="d-flex" *ngIf="showLoader == true">
+    <div [ngClass]="[options.textClass || 'text-danger', 'spinner-border', options.spinnerSize]" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>

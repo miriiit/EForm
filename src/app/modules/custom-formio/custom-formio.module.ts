@@ -12,6 +12,7 @@ import { AppConfig } from 'src/formio-config';
 import { FormsModule } from '@angular/forms';
 import { ViewFormioComponent } from './components/view-formio/view-formio.component';
 import { AppConstants } from 'src/app/constants/app-constants';
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
   {
@@ -36,6 +37,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     FormioModule,
+    SharedModule
   ],
   providers: [
     FormioHttpService,

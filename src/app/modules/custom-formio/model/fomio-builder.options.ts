@@ -197,9 +197,15 @@ export const formioOptions = {
         label: 'Basic',
         components: [
           {
-            key: 'isDisableToUser',
+            key: 'isDisableForUser',
             input: true,
-            label: 'Show User',
+            label: 'Is Disable for User',
+            type: 'checkbox'
+          },
+          {
+            key: 'isHiddenForUser',
+            input: true,
+            label: 'Is Hidden for User',
             type: 'checkbox'
           },
           {

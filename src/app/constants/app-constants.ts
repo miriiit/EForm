@@ -6,6 +6,17 @@ export class AppConstants {
             viewFormIo: 'view-formio'
         }
     }
+
+
+    public static readonly Text = {
+       apiWSuccess: 'Successfully Saved Record!',
+       apiUpdateSuccess: 'Successfully Updated Record!',
+       apiDeleteSuccess: 'Successfully Deleted Record!',
+       apiFail: 'Something went wrong!',
+    }
+
+
+
     // Form 
     public static readonly Form_Get_Listing = 'Forms';
     public static readonly Form_Get_Item = 'Forms';

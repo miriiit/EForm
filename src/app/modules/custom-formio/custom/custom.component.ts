@@ -13,10 +13,10 @@ import { Formio, FormBuilderComponent } from '@formio/angular';
 import { FormioRefreshValue } from "@formio/angular";
 import { finalize } from "rxjs/operators";
 import { AppConstants } from "src/app/constants/app-constants";
-import { IGenericResponst } from "src/app/models/generic-response.model";
-import { ApiClientHelper } from "src/app/service/api-client.helper.service";
+import { AppService } from "src/app/service/app.service";
 import { LoadingService } from "src/app/service/loading.service";
 import { EModalType, ModalBService } from "src/app/service/modal-b.service";
+import { ToastService } from "src/app/service/toast.service";
 import { EMatchingParams } from "../../enum/matching-params.enum";
 
 import { formioOptions } from '../model/fomio-builder.options';
@@ -43,6 +43,8 @@ export class CustomComponent implements AfterViewInit, OnInit {
 
   constructor(
     public service: FormioHttpService, private loadingService: LoadingService, private modalService: ModalBService,
+    private toastService: ToastService,
+    private appService: AppService,
     private activatedRoute: ActivatedRoute,
     private router: Router) {
     this.options = formioOptions;
@@ -77,9 +79,19 @@ export class CustomComponent implements AfterViewInit, OnInit {
 
   addForm() {
     let formData = JSON.stringify(this.form);
-    this.service.addForm(formData).subscribe((res) => {
-      this.refreshFormList();
-    });
+    this.loadingService.start();
+    this.service.addForm(formData)
+      .pipe(finalize(() => this.loadingService.stop()))
+      .subscribe({
+        next: res => {
+          this.toastService.showSuccess(AppConstants.Text.apiWSuccess);
+          this.refreshFormList();
+        },
+        error: () => {
+          this.service.errorObs.next(true);
+          this.showFailure();
+        }
+      });
   }
 
 
@@ -98,19 +110,35 @@ export class CustomComponent implements AfterViewInit, OnInit {
     if ('components' in formJson) {
       this.parseHeaders(formJson.components, EMatchingParams.FormHeader);
     }
-
-    this.router.navigate([AppConstants.ROUTES.formIo.viewFormIo, { data:  JSON.stringify(formJson)}], {relativeTo: this.activatedRoute});
+    this.router.navigate([AppConstants.ROUTES.formIo.viewFormIo, { data: JSON.stringify(formJson) }], { relativeTo: this.activatedRoute });
     // this.modalService.open(EModalType.VIEW_FORMIO, JSON.stringify(formJson));
     // this.viewform = formJson;
   }
 
   deleteClick(item: any) {
-    if (confirm('Are you sure??')) {
-      this.service.deleteForm(item.id).subscribe(data => {
-        console.log(data);
-        this.refreshFormList();
+    this.modalService
+      .confirm(
+        "Delete Form",
+        `Are you sure, you want to delete the Form ${item.id}?`
+      )
+      .then((confirmed) => {
+        if (confirmed) {
+          this.loadingService.start();
+          this.service.deleteForm(item.id)
+            .pipe(finalize(() => this.loadingService.stop()))
+            .subscribe({
+              next: res => {
+                this.toastService.showSuccessDanger(AppConstants.Text.apiDeleteSuccess);
+                this.refreshFormList();
+              },
+              error: () => {
+                this.service.errorObs.next(true);
+                this.showFailure();
+              }
+            })
+        }
       })
-    }
+      .catch();
   }
 
   updateForm() {
@@ -120,23 +148,29 @@ export class CustomComponent implements AfterViewInit, OnInit {
       formJson: JSON.stringify(this.form)
     };
 
-    console.log("updateFormData : ", updateFormData);
-
-    this.service.updateForm(updateFormData).subscribe(res => {
-      console.log(res)
-      this.refreshFormList();
-    });
-
+    // console.log("updateFormData : ", updateFormData);
+    this.loadingService.start();
+    this.service.updateForm(updateFormData)
+      .pipe(finalize(() => this.loadingService.stop()))
+      .subscribe({
+        next: res => {
+          this.toastService.showSuccess(AppConstants.Text.apiUpdateSuccess);
+          this.refreshFormList();
+        },
+        error: () => {
+          this.service.errorObs.next(true);
+          this.showFailure();
+        }
+      });
   }
 
   onSubmit(submission: any) {
     console.log("submission", submission); // This will print out the full submission from Form.io API.
-
     this.viewform.emit('submitDone')
   }
 
   onRenderCompleted($event) {
-    // console.log("onRenderCompleted :", $event)
+    console.log("onRenderCompleted :", $event)
   }
 
   ready(event) {
@@ -150,6 +184,14 @@ export class CustomComponent implements AfterViewInit, OnInit {
         if (item.label == matchParam) {
           this.repalaceHeaderDetail(item);
         }
+
+        // Apply user Role Check
+        if ('isDisableForUser' in item && item.isDisableForUser) {
+          item['disabled'] = true;
+        } else if ('isHiddenForUser' in item && item.isHiddenForUser) {
+          item['hidden'] = true;
+        }
+
       }
     }
   }
@@ -172,8 +214,13 @@ export class CustomComponent implements AfterViewInit, OnInit {
         },
         error: () => {
           this.service.errorObs.next(true);
+          this.showFailure();
         }
       });
+  }
+
+  showFailure() {
+    this.toastService.showFailDanger(AppConstants.Text.apiFail);
   }
 }
 

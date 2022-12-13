@@ -10,7 +10,7 @@ import { AppService, TComponent } from 'src/app/service/app.service';
 *****************************************************************************************************/
 
 @Component({
-  selector: 'app-app-modal-b',
+  selector: 'app-modal-b',
   templateUrl: './app-modal-b.component.html',
   styleUrls: ['./app-modal-b.component.scss']
 })

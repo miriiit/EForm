@@ -14,6 +14,9 @@ import { LoadingIconBComponent } from './components/loading-icon-b/loading-icon-
 import { DynamicComponentDirective } from './directives/dynamic-component.directive';
 import { AppService } from './service/app.service';
 import { AppModalBComponent } from './components/app-modal-b/app-modal-b.component';
+import { ConfirmModalComponent } from './components/modals/confirm-modal-b/confirm-modal-b.component';
+import { ToastsContainer } from './components/toast-container/toast-container.component';
+import { ToastService } from './service/toast.service';
 
 
 /* before @NgModule({}) */
@@ -28,14 +31,16 @@ export function getConfigData(configService: AppConfigService) {
     AppLayoutComponent,
     FormioLayoutComponent,
     LoadingIconBComponent,
+    ConfirmModalComponent,
     AppModalBComponent,
-    DynamicComponentDirective
+    DynamicComponentDirective,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    NgbModule
+    NgbModule,
+    ToastsContainer
   ],
   providers: [
     {
@@ -46,7 +51,8 @@ export function getConfigData(configService: AppConfigService) {
     },
     LocalStorageService,
     ApiClientHelper,
-    AppService
+    AppService,
+    ToastService
   ],
   bootstrap: [AppComponent]
 })

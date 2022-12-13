@@ -108,7 +108,7 @@ export class CustomComponent implements AfterViewInit, OnInit {
     let formJson = JSON.parse(item.formJson);
     // console.log("JSON.parse(item.formJson) : ", formJson);
     if ('components' in formJson) {
-      this.parseHeaders(formJson.components, EMatchingParams.FormHeader);
+      this.parseComponents(formJson.components, EMatchingParams.FormHeader);
     }
     this.router.navigate([AppConstants.ROUTES.formIo.viewFormIo, { data: JSON.stringify(formJson) }], { relativeTo: this.activatedRoute });
     // this.modalService.open(EModalType.VIEW_FORMIO, JSON.stringify(formJson));
@@ -178,7 +178,7 @@ export class CustomComponent implements AfterViewInit, OnInit {
     //this.viewform = event.formio;
   }
 
-  parseHeaders(components: any[] = [], matchParam: EMatchingParams) {
+  parseComponents(components: any[] = [], matchParam: EMatchingParams) {
     if (components && components.length) {
       for (let item of components) {
         if (item.label == matchParam) {

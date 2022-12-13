@@ -79,19 +79,23 @@ export class CustomComponent implements AfterViewInit, OnInit {
 
   addForm() {
     let formData = JSON.stringify(this.form);
-    this.loadingService.start();
-    this.service.addForm(formData)
-      .pipe(finalize(() => this.loadingService.stop()))
-      .subscribe({
-        next: res => {
-          this.toastService.showSuccess(AppConstants.Text.apiWSuccess);
-          this.refreshFormList();
-        },
-        error: () => {
-          this.service.errorObs.next(true);
-          this.showFailure();
-        }
-      });
+    if (formData) {
+      this.loadingService.start();
+      this.service.addForm(formData)
+        .pipe(finalize(() => this.loadingService.stop()))
+        .subscribe({
+          next: res => {
+            this.toastService.showSuccess(AppConstants.Text.apiWSuccess);
+            this.refreshFormList();
+          },
+          error: () => {
+            this.service.errorObs.next(true);
+            this.showFailure();
+          }
+        });
+    } else {
+      this.showFailure();
+    }
   }
 
 
@@ -100,6 +104,7 @@ export class CustomComponent implements AfterViewInit, OnInit {
     let formJson = JSON.parse(item.formJson);
     this.form = formJson;
     this.viewform = formJson;
+    this.appService.scrollToTop();
   }
 
 
@@ -130,6 +135,7 @@ export class CustomComponent implements AfterViewInit, OnInit {
               next: res => {
                 this.toastService.showSuccessDanger(AppConstants.Text.apiDeleteSuccess);
                 this.refreshFormList();
+                this.appService.scrollToTop();
               },
               error: () => {
                 this.service.errorObs.next(true);
@@ -143,25 +149,29 @@ export class CustomComponent implements AfterViewInit, OnInit {
 
   updateForm() {
 
-    let updateFormData = {
-      id: this.FormId,
-      formJson: JSON.stringify(this.form)
-    };
+    if (this.form) {
+      let updateFormData = {
+        id: this.FormId,
+        formJson: JSON.stringify(this.form)
+      };
 
-    // console.log("updateFormData : ", updateFormData);
-    this.loadingService.start();
-    this.service.updateForm(updateFormData)
-      .pipe(finalize(() => this.loadingService.stop()))
-      .subscribe({
-        next: res => {
-          this.toastService.showSuccess(AppConstants.Text.apiUpdateSuccess);
-          this.refreshFormList();
-        },
-        error: () => {
-          this.service.errorObs.next(true);
-          this.showFailure();
-        }
-      });
+      // console.log("updateFormData : ", updateFormData);
+      this.loadingService.start();
+      this.service.updateForm(updateFormData)
+        .pipe(finalize(() => this.loadingService.stop()))
+        .subscribe({
+          next: res => {
+            this.toastService.showSuccess(AppConstants.Text.apiUpdateSuccess);
+            this.refreshFormList();
+          },
+          error: () => {
+            this.service.errorObs.next(true);
+            this.showFailure();
+          }
+        });
+    } else {
+      this.showFailure();
+    }
   }
 
   onSubmit(submission: any) {

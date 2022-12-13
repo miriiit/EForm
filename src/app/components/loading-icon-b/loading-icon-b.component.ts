@@ -9,11 +9,12 @@ import { LoadingService } from 'src/app/service/loading.service';
 export class LoadingIconBComponent {
   
   @Input()
-  public options: TLoadingIconOptions = {textClass: ''}
+  public options: TLoadingIconOptions = {textClass: '', alignClass: ''}
 
   constructor(public loadingService: LoadingService){}
 }
 
 type TLoadingIconOptions = {
-   textClass: string;
+   textClass?: string;
+   alignClass: string;
 }

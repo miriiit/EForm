@@ -1,4 +1,4 @@
-<button [type]="type" (click)="onClick()" [disabled]="isDisabled" [ngClass]="['btn', cssClass]">
+<button [type]="type" (click)="onClick()" [disabled]="isDisabled" [ngClass]="['btn', cssClass]" [ngStyle]="{'width': minWidth}">
     <span class="d-flex">
         <app-loading-icon-b [options]="{spinnerSize: 'spinner-border-sm', textClass: 'text-light'}" [actionType]="loadingAction" style="margin-right:0.5em;"></app-loading-icon-b>
         {{ buttonText }}

@@ -22,6 +22,7 @@ export class CstmBtnComponent {
   @Output() btnClick = new EventEmitter();
   @Input() isDisabled = false;
   @Input() loadingAction: EAppActions;
+  @Input() minWidth: string = "6em";
 
   @Input() 
   isLoading = false;

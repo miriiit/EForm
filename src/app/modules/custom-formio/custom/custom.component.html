@@ -6,8 +6,8 @@
 
         <form-builder [form]="form" (change)="onChange($event)" [options]="options"></form-builder>
         <div class="col-12"  style="margin:1em 0em;">
-            <app-cstm-btn (btnClick)="addForm()" [isLoading]="" text="Add Form" [loadingAction]="loadingAddFormIo" cssClass="btn-primary" [isDisabled]="false" style="margin-right: 1em;"></app-cstm-btn>
-            <app-cstm-btn (btnClick)="updateForm()" text="Update Form" [loadingAction]="loadingUpdateFormIo" cssClass="btn-warning" [isDisabled]="false"></app-cstm-btn>
+            <app-cstm-btn (btnClick)="addForm()" [isLoading]="" minWidth="10em" text="Add Form" [loadingAction]="loadingAddFormIo" cssClass="btn-primary" [isDisabled]="false" style="margin-right: 1em;"></app-cstm-btn>
+            <app-cstm-btn (btnClick)="updateForm()" minWidth="10em" text="Update Form" [loadingAction]="loadingUpdateFormIo" cssClass="btn-warning" [isDisabled]="false"></app-cstm-btn>
         </div>
 
         <hr />

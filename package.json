@@ -25,6 +25,7 @@
     "@popperjs/core": "^2.11.6",
     "@webcomponents/custom-elements": "^1.5.1",
     "bootstrap": "^5.2.3",
+    "ngx-json-viewer": "^3.2.1",
     "rxjs": "^6.5.0",
     "save": "^2.9.0",
     "tslib": "^2.4.1",

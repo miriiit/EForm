@@ -12,16 +12,20 @@ export class AppService {
     constructor(private viewpart: ViewportScroller) { }
 
     loadComponent(payload: TComponent) {
-        this.appObservable.next(payload)
+        this.appObservable.next(payload);
     }
 
     scrollToTop() {
         this.viewpart.scrollToPosition([0,0]);
     }
+
+    appendPayload(payload: TComponent) {
+        this.appObservable.next(payload);
+    }
 }
 
 export type TComponent = {
     component: any,
-    action: 'add' | 'remove',
+    action: 'add' | 'remove' | 'payload',
     data?: any
 };

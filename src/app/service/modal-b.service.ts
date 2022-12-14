@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { AppModalBComponent } from '../components/app-modal-b/app-modal-b.component';
 import { ConfirmModalComponent } from '../components/modals/confirm-modal-b/confirm-modal-b.component';
 import { ViewFormioComponent } from '../modules/custom-formio/components/view-formio/view-formio.component';
+import { ViewJsonComponent } from '../modules/shared/components/view-json/view-json.component';
 import { AppService } from './app.service';
 
 @Injectable({
@@ -14,12 +15,18 @@ export class ModalBService {
     constructor(private modalService: NgbModal, private appService: AppService) { }
 
     open(action: EModalType, data: any) {
-        switch(action) {
-            case EModalType.VIEW_FORMIO:
-                this.appService.loadComponent({component: ViewFormioComponent, action: 'add', 'data': data});
+        switch (action) {
+            case EModalType.ViewFormIO: {
+                this.appService.loadComponent({ component: ViewFormioComponent, action: 'add', 'data': data });
                 const modalRef = this.modalService.open(AppModalBComponent, { size: 'xl', scrollable: true });
                 // modalRef.componentInstance.name = 'World';
-            break;
+            }
+                break;
+            case EModalType.ViewFormIoSubmissionData: {
+                this.appService.loadComponent({ component: ViewJsonComponent, action: 'add', 'data': data }); // listening in app modal b component
+                const modalRef = this.modalService.open(AppModalBComponent, { size: 'xl', scrollable: true });
+            }
+                break;
         }
     }
 
@@ -39,5 +46,6 @@ export class ModalBService {
 }
 
 export enum EModalType {
-    VIEW_FORMIO = 'view-form-io'
+    ViewFormIO = 'view-form-io',
+    ViewFormIoSubmissionData = 'view-form-io-submission-data',
 }

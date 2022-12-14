@@ -18,6 +18,7 @@ import { EAppActions, LoadingService } from "src/app/service/loading.service";
 import { EModalType, ModalBService } from "src/app/service/modal-b.service";
 import { ToastService } from "src/app/service/toast.service";
 import { EMatchingParams } from "../../enum/matching-params.enum";
+import { ViewFormioComponent } from "../components/view-formio/view-formio.component";
 
 import { formioOptions } from '../model/fomio-builder.options';
 import { FormioHttpService } from '../service/formio-http.service';
@@ -83,6 +84,10 @@ export class CustomComponent implements AfterViewInit, OnInit {
   }
 
   addForm() {
+    if (!this.validateFormSave()) {
+      this.showFailure();
+      return false;
+    }
     let formData = JSON.stringify(this.form);
     if (formData) {
       this.loadingService.start(EAppActions.AddFormIo);
@@ -120,7 +125,10 @@ export class CustomComponent implements AfterViewInit, OnInit {
     if ('components' in formJson) {
       this.parseComponents(formJson.components, EMatchingParams.FormHeader);
     }
-    this.router.navigate([AppConstants.ROUTES.formIo.viewFormIo, { data: JSON.stringify(formJson) }], { relativeTo: this.activatedRoute });
+
+    this.appService.appendPayload({ component: ViewFormioComponent, action: 'payload', data: { formio: JSON.stringify(formJson), formId: item.id } });
+    this.router.navigate([AppConstants.ROUTES.formIo.view], { relativeTo: this.activatedRoute });
+    // this.router.navigate([AppConstants.ROUTES.formIo.viewFormIo, { data: JSON.stringify(formJson) }], { relativeTo: this.activatedRoute });
     // this.modalService.open(EModalType.VIEW_FORMIO, JSON.stringify(formJson));
     // this.viewform = formJson;
   }
@@ -140,7 +148,7 @@ export class CustomComponent implements AfterViewInit, OnInit {
               next: res => {
                 this.toastService.showSuccessDanger(AppConstants.Text.apiDeleteSuccess);
                 this.refreshFormList();
-                this.appService.scrollToTop();
+                // this.appService.scrollToTop();
               },
               error: () => {
                 this.service.errorObs.next(true);
@@ -199,14 +207,12 @@ export class CustomComponent implements AfterViewInit, OnInit {
         if (item.label == matchParam) {
           this.repalaceHeaderDetail(item);
         }
-
         // Apply user Role Check
         if ('isDisableForUser' in item && item.isDisableForUser) {
           item['disabled'] = true;
         } else if ('isHiddenForUser' in item && item.isHiddenForUser) {
           item['hidden'] = true;
         }
-
       }
     }
   }
@@ -236,6 +242,26 @@ export class CustomComponent implements AfterViewInit, OnInit {
 
   showFailure() {
     this.toastService.showFailDanger(AppConstants.Text.apiFail);
+  }
+
+  validateFormSave(): boolean {
+    let status = false;
+    if (this.form.components) {
+      if (this.form.components.length) {
+        if (this.form.components.length == 1) {
+          for (let item of this.form.components) {
+            if (item.key && item.key == 'submit') {
+              status = false;
+            }
+          }
+        } else {
+          status = true;
+        }
+      } else {
+        status = false;
+      }
+    }
+    return status;
   }
 }
 

@@ -20,7 +20,7 @@ const routes: Routes = [
     component: CustomComponent,
   },
   {
-    path: AppConstants.ROUTES.formIo.viewFormIo,
+    path: AppConstants.ROUTES.formIo.view,
     component: ViewFormioComponent,
   },
 ];

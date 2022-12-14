@@ -3,10 +3,10 @@ export class AppConstants {
 
     public static readonly ROUTES = {
         formIo: {
-            viewFormIo: 'view-formio'
+            builder: 'formio',
+            view: 'view-formio',
         }
     }
-
 
     public static readonly Text = {
        apiWSuccess: 'Successfully Saved Record!',
@@ -14,8 +14,6 @@ export class AppConstants {
        apiDeleteSuccess: 'Successfully Deleted Record!',
        apiFail: 'Something went wrong!',
     }
-
-
 
     // Form 
     public static readonly Form_Get_Listing = 'Forms';

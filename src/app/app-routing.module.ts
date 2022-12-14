@@ -8,16 +8,18 @@ import { FormioLayoutComponent } from './pages/formio-layout/formio-layout.compo
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "formio",
+    redirectTo: "app",
     pathMatch: "full"
-  },
-  {
+  }, {
+    path: "app",
+    component: AppLayoutComponent,
+  }, {
     path: "formio",
     component: FormioLayoutComponent,
     children: [
       {
         path: "",
-        loadChildren: () => import ("./modules/custom-formio/custom-formio.module").then(m => m.CustomFormIoModule)
+        loadChildren: () => import("./modules/custom-formio/custom-formio.module").then(m => m.CustomFormIoModule)
       }
     ]
   },

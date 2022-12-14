@@ -8,8 +8,12 @@ export class LocalStorageService {
 	private store: any = {};
 
 
-	public get(key: string): any {
-		return localStorage.getItem(key);
+	public get(key: string, parse: boolean = false): any {
+		let value = localStorage.getItem(document.location.hostname+'-'+ key);
+		if(parse) {
+			value = JSON.parse(value);
+		}
+		return value;
 	}
 
 	public getAll(): any {
@@ -19,8 +23,13 @@ export class LocalStorageService {
 	}
 
 
-	public save(key: string, value: any): boolean {
-		localStorage.setItem(key, value);
+	public save(key: string, value: any, stringify: boolean = false): boolean {
+
+		if(stringify) {
+			value = JSON.stringify(value);
+		}
+
+		localStorage.setItem(document.location.hostname+'-'+ key, value);
 		this.storeKeys.push(key);
 		return true;
 	}

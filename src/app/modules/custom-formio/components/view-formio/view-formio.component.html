@@ -1,6 +1,7 @@
 <div class="page-view-formio">
     <div class="page-actions">
-        <a *ngIf="this.formId" [routerLink]="[]" (click)="viewSubmissionData()" class="btn btn-outline-success float-end mb-2" style="margin-left: 1em;">View Submission Data</a>
+        <a *ngIf="this.formId" [routerLink]="[]" (click)="viewSubmissionData()" class="btn btn-light float-end mb-2" style="margin-left: 1em;">View Submission Data</a>
+        <a [routerLink]="[]" (click)="navigateToFormIoList()" class="btn btn-light float-end mb-2" style="margin-left: 1em;">Back to list</a>
         <a [routerLink]="[]" (click)="navigateToFormBuilder()" class="btn btn-outline-danger float-end mb-2">Back to builder</a>
     </div>
     <div class="page-content" *ngIf="this.formId; else noOutlet">

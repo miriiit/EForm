@@ -1,0 +1,133 @@
+.content {
+    width: 12em;
+    // border: 1px solid red;
+    display: block;
+}
+
+.bg-skelton {
+    height:26vh;
+    width: 100%;
+    border: 1px solid rgb(158, 158, 158);
+    border-radius: 3px 3px 3px 3px;
+    background-position:center;
+    background-repeat: no-repeat;
+    // background-size: cover;
+    // background-attachment: fixed;
+    background-size: 100% 25vh;
+    background-image: url('/assets/images/human-body-2.png');
+    position: relative;
+}
+
+
+.input-bd_M-head {
+    position: absolute;
+    top: 0.9em;
+    right: 7.6em;
+}
+
+.input-bd_F-head {
+    position: absolute;
+    top: 0.9em;
+    right: 3.3em;
+}
+
+
+/* Male Shoulder */
+.input-bd_M-shoulder-l {
+    position: absolute;
+    top: 3.8em;
+    right: 8.8em;
+}
+
+.input-bd_M-chest-tp {
+    position: absolute;
+    top: 4em;
+    right: 7.5em;
+}
+
+.input-bd_M-shoulder-r {
+    position: absolute;
+    top: 3.8em;
+    right: 6.2em;
+}
+
+/* Female Shoulder */
+
+.input-bd_F-shoulder-l {
+    position: absolute;
+    top: 3.8em;
+    right: 4.8em;
+}
+
+.input-bd_F-chest-tp {
+    position: absolute;
+    top: 4em;
+    right: 3.2em;
+}
+
+.input-bd_F-shoulder-r {
+    position: absolute;
+    top: 3.8em;
+    right: 1.9em;
+}
+
+/* Uper Arm Male */
+
+.input-bd_M-uperarm-l {
+    position: absolute;
+    top: 5.2em;
+    right: 9em;
+}
+
+.input-bd_M-uperarm-r {
+    position: absolute;
+    top: 5.2em;
+    right: 6em;
+}
+
+
+.input-bd_M-chest-cn {
+    position: absolute;
+    top: 6.2em;
+    right: 7.4em;
+}
+
+
+/* Uper Arm FeMale */
+
+
+.input-bd_F-uperarm-l {
+    position: absolute;
+    top: 5.2em;
+    right: 4.8em;
+}
+
+.input-bd_F-uperarm-r {
+    position: absolute;
+    top: 5.2em;
+    right: 1.8em;
+}
+
+
+
+
+
+.input-bd_M-hand-l {
+    position: absolute;
+    top: 12.8em;
+    right: 11.8em;
+}
+
+.input-bd_M-chest-bt {
+    position: absolute;
+    top: 12.8em;
+    right: 6.8em;
+}
+
+.input-bd_M-hand-r {
+    position: absolute;
+    top: 12.8em;
+    right: 1.9em;
+}
+
+

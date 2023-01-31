@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
-import { AppConstants } from '../constants/app-constants';
+import { AppConstants } from 'src/app/constants/app.constant';
 
 @Injectable()
 export class ApiClientHelper {
@@ -64,8 +64,12 @@ export class ApiClientHelper {
 			}));
 	}
 
-	public getAsObservable(url: string): Observable<any> {
-		return this.http.get(url, AppConstants.httpOptions);
+	public getAsObservable<T>(url: string, params: any = null): Observable<T> {
+		if (params) {
+			return this.http.get<T>(url, { ...AppConstants.httpOptions, params });
+		} else {
+			return this.http.get<T>(url, AppConstants.httpOptions);
+		}
 	}
 
 

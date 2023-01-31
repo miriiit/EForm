@@ -1,18 +1,29 @@
 import { HttpHeaders } from "@angular/common/http";
 export class AppConstants {
 
+    public static ApiRequestTypes = {
+        GET: 'get',
+        POST: 'post'
+    }
+
     public static readonly ROUTES = {
-        formIo: {
-            builder: 'formio',
-            view: 'view-formio',
+        FormIo: {
+            default: { path: 'formio', relativePath: 'formio' },
+            builder: { path: 'builder', relativePath: 'formio/builder' },
+            view: { path: 'view', relativePath: 'formio/view' },
+            list: { path: 'list', relativePath: 'formio/list' },
+        },
+        Requests: {
+            default: { path: 'request', relativePath: 'request' },
+            avaialable: { path: 'available', relativePath: 'request/available' },
         }
     }
 
     public static readonly Text = {
-       apiWSuccess: 'Successfully Saved Record!',
-       apiUpdateSuccess: 'Successfully Updated Record!',
-       apiDeleteSuccess: 'Successfully Deleted Record!',
-       apiFail: 'Something went wrong!',
+        apiWSuccess: 'Successfully Saved Record!',
+        apiUpdateSuccess: 'Successfully Updated Record!',
+        apiDeleteSuccess: 'Successfully Deleted Record!',
+        apiFail: 'Something went wrong!',
     }
 
     // Form 

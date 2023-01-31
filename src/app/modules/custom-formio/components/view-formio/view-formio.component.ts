@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormioRefreshValue } from '@formio/angular';
-import { AppConstants } from 'src/app/constants/app-constants';
+import { FormioRefreshValue, FormioService } from '@formio/angular';
+import { AppConstants } from 'src/app/constants/app.constant';
 import { AppService } from 'src/app/service/app.service';
 import { LocalStorageService } from 'src/app/service/local-storage.service';
 import { EModalType, ModalBService } from 'src/app/service/modal-b.service';
+import { ToastService } from 'src/app/service/toast.service';
+import { FormioHttpService } from '../../service/formio-http.service';
 
 @Component({
   selector: 'app-view-formio',
@@ -27,18 +29,38 @@ export class ViewFormioComponent implements OnInit {
     private router: Router,
     private storageService: LocalStorageService,
     private appService: AppService,
-    private modalService: ModalBService) { }
+    private modalService: ModalBService,
+    private service: FormioHttpService,
+    private toastService: ToastService) { }
 
   ngOnInit() {
 
     // Receiving data from router params
-    // if(!this.data){
-    //   this.data  = this.activatedRoute.snapshot.paramMap.get('data');
-    // }
+    if (!this.data) {
+      this.formId = this.activatedRoute.snapshot.paramMap.get('id');
+    }
+
     // this.viewform =  JSON.parse(this.data);
 
     this.submissionData = { data: {} };
-    this.subscribeAppService();
+    this.getFormIoData();
+  }
+
+  getFormIoData(): void {
+    if (this.formId) {
+      this.service.getFormIoById(this.formId).subscribe({
+        next: (res) => {
+          //Api Response Needs To update
+          // this.viewform = res.data.formJson;
+          this.viewform = JSON.parse(res['formJson']);
+        },
+        error: () => {
+          this.showFailure();
+        }
+      });
+    } else {
+
+    }
   }
 
   subscribeAppService(): void {
@@ -73,10 +95,24 @@ export class ViewFormioComponent implements OnInit {
   }
 
   viewSubmissionData() {
-    this.modalService.open(EModalType.ViewFormIoSubmissionData, {title: `Form: ${this.formId} Submission Data`, json: JSON.stringify(this.submissionData)});
+    this.modalService.open(EModalType.ViewFormIoSubmissionData, { title: `Form: ${this.formId} Submission Data`, json: JSON.stringify(this.submissionData) });
   }
 
   navigateToFormBuilder() {
-    this.router.navigate([AppConstants.ROUTES.formIo.builder])
+    this.router.navigate(['../'+AppConstants.ROUTES.FormIo.builder.path, {id: this.formId}], {relativeTo: this.activatedRoute})
   }
+
+  navigateToFormIoList() {
+    this.router.navigate(['../'+AppConstants.ROUTES.FormIo.list.path], {relativeTo: this.activatedRoute});
+  }
+
+  showFailure() {
+    this.toastService.showFailDanger(AppConstants.Text.apiFail);
+  }
+
+}
+
+export type TGetFormIoRes = {
+  id: string,
+  formJson: string,
 }

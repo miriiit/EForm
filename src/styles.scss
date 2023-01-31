@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@import './src/assets/scss/variable.scss';
+@import './src/assets/scss/portlet.scss';
 @import '../node_modules/bootstrap/scss/bootstrap';
 
 pre {
@@ -28,3 +30,37 @@ pre {
         color: #fff;
     }
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.text-w-icon {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    padding: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    box-sizing: border-box;
+    color: inherit;
+    font-size: inherit;
+    background: none;
+    text-decoration: none;
+    margin: 0;
+}
+
+
+.icon-display-0_8x {
+    transform: scale(0.8);
+ }

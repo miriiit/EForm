@@ -1,0 +1,4 @@
+<div mat-tab-nav-panel>
+    <app-grid [pageConfig]="pageConfig" [data]="gridObj" (updatedObj)="updatedObj($event)" #grid
+    (openInDetailMode)="openRecordDetailPage($event)" (menuItem)="updateStatus($event)" (popupClickHandler)="popupClickHandler($event)"></app-grid>
+</div>

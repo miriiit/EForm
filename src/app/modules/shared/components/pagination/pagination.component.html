@@ -1,0 +1,33 @@
+<div class="col-12" *ngIf="totalRecords > 0" >
+    <div style="display: flex; justify-content: flex-end;">
+        <div class="col-3 d-flex">
+            <span class="item">Items per page:</span>
+            <mat-select class="item" style="width:40%; font-size: 12px;" [(ngModel)]="ipagination.recordsPerPage"
+                (selectionChange)="onClickPage(1)">
+                <ng-container *ngFor="let rpp of recordsPerpage">
+                    <mat-option [value]="rpp">{{rpp}}</mat-option>
+                </ng-container>
+            </mat-select>
+            <mat-divider [vertical]="true"></mat-divider>
+            <span>{{recordsRange.start}} - {{recordsRange.end}} of {{totalRecords}} items</span>
+        </div>
+        <div class="col-3 d-flex">
+            <mat-divider class="item" [vertical]="true"></mat-divider>
+            <mat-select class="item" style="width:40%; font-size: 12px;" [(ngModel)]="ipagination.pageNo"
+                (selectionChange)="onClickPage()">
+                <ng-container *ngFor="let item of pages">
+                    <mat-option [value]="item">{{item}}</mat-option>
+                </ng-container>
+            </mat-select>
+            <mat-divider [vertical]="true"></mat-divider>
+            <span>of {{pages.length}} pages</span>
+            <mat-divider [vertical]="true"></mat-divider>
+            <mat-icon style="font-size: 22px; color:#787F8C;cursor: pointer;"
+                (click)="onClickPage(ipagination.pageNo - 1)">arrow_left</mat-icon>
+            <mat-divider [vertical]="true"></mat-divider>
+            <mat-icon style="font-size: 22px; color:#787F8C;cursor: pointer;"
+                (click)="onClickPage(ipagination.pageNo + 1)">arrow_right</mat-icon>
+            <mat-divider [vertical]="true"></mat-divider>
+        </div>
+    </div>
+</div>

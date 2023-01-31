@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AppConfigService } from 'src/app/service/app.config.service';
-import { AppConstants } from 'src/app/constants/app-constants';
-import { ApiClientHelper } from 'src/app/service/api-client.helper.service';
-import { TFormHeader } from '../custom/custom.component';
-import { IGenericResponst } from 'src/app/models/generic-response.model';
-import { finalize, tap } from 'rxjs/operators';
+import { AppConstants } from 'src/app/constants/app.constant';
+import { IGenericResponse } from 'src/app/models/generic-response.model';
+import { ApiClientHelper } from '../../shared/service/api-client.helper.service';
+import { TGetFormIoRes } from '../components/view-formio/view-formio.component';
+import { TFormHeader } from '../components/formio-builder/formio-builder.component';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +21,10 @@ export class FormioHttpService {
 
   public getFormList(): Observable<any[]> {
     return this.httpService.getAsObservable(this.appConfig.apiUrl + AppConstants.Form_Get_Listing);
+  }
+
+  public getFormIoById(id: any): Observable<IGenericResponse<TGetFormIoRes>> {
+    return this.httpService.getAsObservable<IGenericResponse<TGetFormIoRes>>(this.appConfig.apiUrl + AppConstants.Form_Get_Item+'/'+id);
   }
 
   addForm(form: any): Observable<any> {
@@ -45,9 +49,9 @@ export class FormioHttpService {
   }
 
 
-  public getFormHeaderDetail(): Observable<IGenericResponst<TFormHeader>> {
+  public getFormHeaderDetail(): Observable<IGenericResponse<TFormHeader>> {
     // this.errorObs.next(false);
     const url = `${this.appConfig.apiUrl + AppConstants.Formio_Header_Item}`;
-    return this.httpService.getForObservable<IGenericResponst<TFormHeader>>(url);
+    return this.httpService.getForObservable<IGenericResponse<TFormHeader>>(url);
   }
 }

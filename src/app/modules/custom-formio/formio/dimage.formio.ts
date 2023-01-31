@@ -25,6 +25,7 @@ const COMPONENT_OPTIONS: FormioCustomComponentInfo = {
   group: 'custom', // Build Group
   icon: 'check-circle', // Icon
   fieldOptions: ['label', 'values', 'key', 'properties'],
+  schema: { label: 'human Skeleton', key: 'hSkeleton', hideLabel: true },
   // editForm: imageEditForm, // Use editForm from Radio buttons
   //  template: 'input', // Optional: define a template for the element. Default: input
 //  changeEvent: 'valueChange', // Optional: define the changeEvent when the formio updates the value in the state. Default: 'valueChange',

@@ -1,4 +1,4 @@
-export interface IGenericResponst<T> {
+export interface IGenericResponse<T> {
 	status?: 'fail' | 'success';
 	message?: string;
 	data?: T;

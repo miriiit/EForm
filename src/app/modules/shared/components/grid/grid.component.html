@@ -1,0 +1,197 @@
+<div [ngClass]="pageConfig ? 'page-layout': ''">
+    <!-- <ng-template [ngIf]="pageConfig"> -->
+    <ng-template [ngIf]="false">
+        <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" class="grid-title">
+            <div class="d-flex">
+                <!-- <label *ngIf="pageConfig?.pageTitle">{{pageConfig.pageTitle}}</label> -->
+                <!-- <CM-Button *ngIf="pageConfig?.addbuttonTitle" [value]="pageConfig.addbuttonTitle"
+                    [class]="'btn-grid-action__1 add-edit-btn'" (submit)="addClickHandler()"></CM-Button>
+                <CM-Search [label]="" *ngIf="pageConfig?.searchTitle" (onFilter)="search($event)"
+                    [placeholder]="pageConfig.searchTitle"></CM-Search> -->
+                <div class="align-right">
+                    <button *ngIf="pageConfig.id == 'jurisdictionId'" class="btn btn-sm btn-outline-secondary"
+                        (click)="clickHandler(null, GridActionSearch)" style="margin-right: 0.5em;">
+                    Icon Click </button>
+
+                    <!-- <CM-Button *ngIf="pageConfig?.editButton" [value]="pageConfig.editButton"
+                        [class]="'btn-grid-action__1 edit-btn'" (submit)="editView()"></CM-Button> -->
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <form>
+        <div fxLayout="column" fxLayoutAlign="space-between none">
+            <div style="overflow-x: scroll;" [ngStyle]="{'height': pageConfig?.tableHeight}">
+                <div class="scroll-horizontal">
+                    <table class="table" id="{{pageConfig?.id}}" [ngStyle]="{'width': pageConfig?.tableWidth, margin: '0 auto'}" *ngIf="data.values && data.values.length">
+                        <thead>
+                            <tr class="header-list">
+                                <ng-container *ngFor="let col of data.columns">
+                                    <th resizable scope="col" *ngIf="col.isShow" [ngStyle]="{'width': col.width}"
+                                        class="table-headers">
+                                        <div style="display:flex; align-items: center; align-content: center;">
+                                            <span style="width:calc(100% - 15px); display: block;" class="header-box">
+                                                    <span class="text-w-icon"> {{col.name}} <mat-icon [matMenuTriggerFor]="menu">expand_more</mat-icon> </span>
+                                            </span>
+                                            <span style="width:15px; display:block;">
+                                                <mat-menu #menu="matMenu">
+                                                    <div mat-menu-item (click)="$event.stopPropagation();">
+                                                        <mat-form-field appearance="fill"
+                                                            (click)="$event.stopPropagation();">
+                                                            <img matPrefix src="assets/images/sort_filter.svg"  style="margin-right: 3px; height: 17px; width: 17px; ">
+                                                            <input #iputControl1 matInput placeholder="Filter"
+                                                                (click)="$event.stopPropagation();"
+                                                                (keyup)="applyFilter(iputControl1.value, col)" />
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <button mat-menu-item (click)="sortColumn(col,'asc',$event)">
+                                                        <img src="assets/images/ascending.svg" width="17px" height="17px">
+                                                        Sort Ascending
+                                                    </button>
+                                                    <hr>
+                                                    <button mat-menu-item (click)="sortColumn(col,'desc',$event)">
+                                                        <img src="assets/images/descending.svg" width="17px" height="17px">
+                                                        Sort Descending
+                                                    </button>
+                                                    <hr>
+                                                    <button mat-menu-item [matMenuTriggerFor]="columns">
+                                                        <img src="assets/images/column_icon.svg"
+                                                            style="margin-right: 3px; height: 17px; width: 17px; ">Columns
+                                                    </button>
+                                                </mat-menu>
+                                                <mat-menu #columns="matMenu">
+                                                    <div mat-menu-item *ngFor="let col of data.columns"
+                                                        (click)="$event.stopPropagation();">
+                                                        <mat-checkbox class="example-margin" [checked]="col.isShow"
+                                                            (change)="changeColumnStatus(col)"
+                                                            (click)="$event.stopPropagation();">
+                                                            {{col.name}}
+                                                        </mat-checkbox>
+                                                    </div>
+                                                </mat-menu>
+                                            </span>
+                                        </div>
+                                    </th>
+                                </ng-container>
+                                <!-- <th *ngIf="inlineEditting">Actions</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-template [ngIf]="data.values && data.values.length">
+                            <tr *ngFor="let value of data.values | paginate: { itemsPerPage: itemsPerpage, currentPage: pageNo }">
+                                <ng-container *ngFor="let col of data.columns">
+                                    <td *ngIf="col.isShow" [ngStyle]="col.cssStyle" [width]="col.width" fxFlexLayout="">
+                                        <ng-container *ngIf="!value.isEdit; else formControls">
+                                            <ng-container *ngIf="col?.inputType; else staticValue">
+                                                <ng-container *ngIf="col.inputType=='link'">
+                                                    <div *ngIf="col.key=='caseId'||col.key=='processId' else other">
+                                                        <div class="three-dots">
+                                                            <a class="link" matTooltip="{{value[col.key]}}"
+                                                                (click)="openRecordDetailPage(value,col.key)">{{value[col.key]}}</a>
+                                                        </div>
+                                                    </div>
+                                                    <ng-template #other>
+                                                        <a class="link"
+                                                            (click)="openRecordDetailPage(value, col.key)">{{value[col.key]}}</a>
+                                                    </ng-template>
+                                                </ng-container>
+                                                <ng-container *ngIf="col.inputType == 'icon'">
+                                                    <ng-container>
+                                                        <button mat-icon-button [color]="col?.color" aria-label="" (click)="clickHandler(value, col.key)">
+                                                            <mat-icon>{{getIcon(col.key)}}</mat-icon>
+                                                        </button>
+                                                    </ng-container>
+                                                </ng-container>
+                                                <ng-container *ngIf="col.inputType =='date'">
+                                                    <span>{{value[col.key] | date:'MM-dd-yyyy'}}</span>
+                                                </ng-container>
+                                                <ng-container *ngIf="col.inputType=='menu'">
+                                                    <span style="display: flex;align-items: center;">
+                                                        <span style="width:90%; display: block;">{{value[col.key]}}</span>
+                                                        <mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                                                    </span>
+                                                    <mat-menu #menu="matMenu">
+                                                        <ng-container matMenuContent  *ngFor="let menuItem of col.options" >
+                                                            <button (click)="clickHandler(value, menuItem.key)" mat-menu-item><mat-icon matListItemIcon>{{getIcon(menuItem.key)}}</mat-icon> {{menuItem.value}}</button>
+                                                        </ng-container>
+                                                    </mat-menu>
+                                                </ng-container>
+                                                <!--ignoring controls when is edit is false-->
+                                                <ng-container *ngIf="col.inputType=='plain' || col.inputType=='select'">
+                                                    {{value[col.key]}}
+                                                </ng-container>
+                                            </ng-container>
+                                            <ng-template #staticValue>
+                                                {{value[col.key]}}
+                                            </ng-template>
+                                        </ng-container>
+
+                                        <!-- Templating Editor View -->
+                                        <ng-template #formControls>
+                                            <ng-container [ngSwitch]="col.inputType">
+                                                <ng-container *ngSwitchCase="'plain'">
+                                                <span> {{value[col.key]}} </span>
+                                                </ng-container>
+                                                <ng-container *ngSwitchCase="'text'">
+                                                    <input type="{{col.inputType}}" name="{{col.key}}" class="form-control"
+                                                        placeholder="{{col.placeholder}}" [(ngModel)]="value[col.key]">
+                                                </ng-container>
+                                                <ng-container *ngSwitchCase="'email'">
+                                                    <input type="{{col.inputType}}" name="{{col.key}}" class="form-control"
+                                                        placeholder="{{col.placeholder}}" [(ngModel)]="value[col.key]">
+                                                </ng-container>
+                                                <ng-container *ngSwitchCase="'radio'">
+                                                    <ng-container *ngFor="let button of col.buttons">
+                                                        <input type="{{button.type}}" [(ngModel)]="col.key"
+                                                            name="value[col.key]" value="value[col.key]">
+                                                        <label class="radio-labels">{{button.label}}</label>
+                                                        <br>
+                                                    </ng-container>
+                                                </ng-container>
+                                                <ng-container *ngSwitchCase="'checkbox'"></ng-container>
+
+
+                                                <ng-container *ngSwitchCase="'select'">
+                                                    <select #selectControl1 class="form-control" [value]="value[col.paramKey]"
+                                                        (change)="updateValue(value, value[data?.uniqueId], col, selectControl1.value)"> 
+                                                        <option [value]=""></option>
+                                                        <option *ngFor="let item of value[col.lookupKey]; let i = index"
+                                                            [selected]="item.key == value[col.paramKey]" [value]="item.key">
+                                                            {{item.key}} - {{item.value}}
+                                                        </option>
+                                                    </select>
+                                                    <!-- </ng-template> -->
+                                                </ng-container>
+
+
+                                                <ng-container *ngSwitchCase="'icon'">
+                                                    <div fxLayout="row" fxLayoutAlign="space-around center">
+                                                        <a class="link" (click)="clickHandler(value, col.key)">
+                                                            <button class="btn btn-sm btn-outline-secondary">{{ col.name }}</button>
+                                                            <!-- <mat-icon>{{getIcon('save')}}</mat-icon> -->
+                                                        </a>
+                                                    </div>
+                                                </ng-container>
+                                                
+                                            </ng-container>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </ng-template>
+                        </tbody>
+                    </table>
+                </div>
+                <ng-template [ngIf]="includePagination">
+                    <!-- <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+                        (page)="pageEvent($event)" aria-label="Select page" >
+                    </mat-paginator> -->
+                    <div style="width: 100%; padding:1em 2em; display: -webkit-inline-box;">
+                        <app-pagination [totalRecords]="totalRecords" (onPageChange)="displayActivePage($event)" #pagination>
+                        </app-pagination>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </form>
+</div>

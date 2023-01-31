@@ -1,0 +1,27 @@
+<div class="portlet">
+    <div class="portlet-head">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="glyphicon glyphicon-calendar"></i>
+                <span class="caption-subject text-uppercase"> {{title}}</span>
+                <span class="caption-helper"> &nbsp; {{titleInfo}}</span>
+            </div>
+        </div>
+        <div class="actions">
+            <a href="javascript:;" class="btn">
+                <mat-icon class="icon-display-0_8x">edit</mat-icon>
+                Edit
+            </a>
+            <a href="javascript:;" class="btn">
+                <mat-icon class="icon-display-0_8x">add</mat-icon>
+                Add
+            </a>
+            <a href="javascript:;" class="btn btn-circle">
+                <mat-icon class="icon-display-0_8x">wrench</mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <ng-content select="[portletBody]"></ng-content>
+    </div>
+</div>
